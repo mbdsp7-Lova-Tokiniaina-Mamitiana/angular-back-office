@@ -1,0 +1,50 @@
+<div class="auth">
+  <div class="row auth-card">
+    <div class="col-md-12 auth-forms">
+
+      <div class="row text-center">
+        <h1>PARI EN LIGNE</h1>
+      </div>
+
+      <form [formGroup]="authForm" (ngSubmit)="onLogin()">
+            <mat-form-field appearance="outline" class="col-12">
+              <mat-label>
+                Pseudonyme
+              </mat-label>
+              <input matInput formControlName="login" placeholder="Pseudonyme" autocomplete=false>
+            </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12">
+            <mat-label>
+              Mot de passe
+            </mat-label>
+            <input matInput formControlName="password" placeholder="Mot de passe" autocomplete=false type="password">
+          </mat-form-field>
+
+        <div class="row">
+          <div class="col-md-6 d-flex justify-content-center">
+            <button type="submit" mat-raised-button color="accent">
+              Se connecter
+            </button>
+          </div>
+          <div class="col-md-6 d-flex justify-content-center">
+            <button mat-raised-button color="primary" (click)="onSignUp()" routerLink="/nouvel-utilisateur" >
+              S'inscrire
+            </button>
+          </div>
+
+          <!--<div class="col-md-4"></div>
+          <div class="col-md-4 text-center">
+            <div class="button-row">
+              <button type="submit" mat-raised-button color="accent">
+                Se connecter
+              </button>
+              <button mat-raised-button color="primary" (click)="onSignUp()" routerLink="/nouvel-utilisateur" >
+                S'inscrire
+              </button>
+            </div>
+          </div>-->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
