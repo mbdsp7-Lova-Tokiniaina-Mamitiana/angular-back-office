@@ -34,16 +34,30 @@ import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
+import { BodyComponent } from './body/body.component';
+import { HomeComponent } from './body/home/home.component';
+import {AuthGuard} from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AuthComponent
+    path: 'home',
+    component: BodyComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        component: HomeComponent
+      }
+    ]
   },
+  { path: '',   redirectTo: '/home', pathMatch: 'full' },
+  // Insert new paths between this comment and the last path.
   {
     path: 'login',
     component: AuthComponent
   },
+  // Last path. Do not add another paths under this one.
+  { path: '**',   redirectTo: '/home', pathMatch: 'full' },
 ];
 
 const materialModules = [
@@ -78,7 +92,9 @@ const materialModules = [
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent
+    AuthComponent,
+    BodyComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
