@@ -38,25 +38,14 @@ export class UserService {
             );
     }
 
-    logOut(): any {
-        return this.http.post<any>(`${this.endpoint}/logout`, {headers: this.headersContent})
-            .pipe(
-                catchError(err => this.errorService.handleError(err))
-            );
-    }
-
-    getCurrentUser(): Observable<any> {
-        return this.http.get<any>(`${this.endpoint}/login`, {headers: this.headersContent})
-            .pipe(
-                catchError(err => this.errorService.handleError(err))
-            );
-    }
-
-    getUserProfil(userId: string): User {
-        return new User('Fivintich77', 'MarcMChamberlin@fleckens.hu', '');
+    logOut(): void {
+      localStorage.removeItem('token');
+      localStorage.removeItem('isLogged');
     }
 
     decodeToken(token: string): any {
         return jwt_decode(token);
     }
+
+    isAuthenticated = (): boolean => localStorage.getItem('isLogged') !== null && localStorage.getItem('isLogged') === 'true';
 }
