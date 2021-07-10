@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
@@ -36,7 +36,13 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
 import { BodyComponent } from './body/body.component';
 import { HomeComponent } from './body/home/home.component';
-import {AuthGuard} from './shared/guards/auth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { MapComponent } from './shared/components/map/map.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { ListeEquipeComponent } from './body/liste-equipe/liste-equipe.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ModifierEquipeComponent } from './body/modifier-equipe/modifier-equipe.component';
+import { ModifierMatchComponent } from './body/modifier-match/modifier-match.component';
 
 const routes: Routes = [
   {
@@ -47,6 +53,15 @@ const routes: Routes = [
       {
         path: '',
         component: HomeComponent
+      }, {
+        path: 'equipe',
+        component: ListeEquipeComponent
+      }, {
+        path: 'match',
+        component: ModifierMatchComponent
+      }, {
+        path: 'match/:id',
+        component: ModifierMatchComponent
       }
     ]
   },
@@ -94,15 +109,22 @@ const materialModules = [
     AppComponent,
     AuthComponent,
     BodyComponent,
-    HomeComponent
+    HomeComponent,
+    MapComponent,
+    ListeEquipeComponent,
+    ModifierEquipeComponent,
+    ModifierMatchComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
-    [... materialModules],
-    RouterModule.forRoot(routes)
+    [...materialModules],
+    GoogleMapsModule,
+    RouterModule.forRoot(routes),
+    FontAwesomeModule,
+    FormsModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: ErrorService },
