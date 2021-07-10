@@ -116,3 +116,33 @@ body {
 .box {
   border     : .5px solid #E5E5E5;
 }
+
+.btn-blue{
+  color:#fff;
+  background-color:#0275d8;
+  border: none;
+  padding: 5px 10px;
+}
+
+.action {
+  margin-right: 10px;
+}
+.action:hover{
+  cursor: pointer;
+}
+
+.thead-custom {
+  border-top: lightgray solid thin !important;
+  border-bottom: lightgray solid medium !important;
+}
+
+th {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+td {
+  border-bottom: lightgray solid thin !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
