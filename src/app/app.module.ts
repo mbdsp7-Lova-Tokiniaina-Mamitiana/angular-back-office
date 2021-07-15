@@ -43,6 +43,8 @@ import { ListeEquipeComponent } from './body/liste-equipe/liste-equipe.component
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModifierEquipeComponent } from './body/modifier-equipe/modifier-equipe.component';
 import { ModifierMatchComponent } from './body/modifier-match/modifier-match.component';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
+import {DatePipe} from '@angular/common';
 
 const routes: Routes = [
   {
@@ -124,9 +126,11 @@ const materialModules = [
     GoogleMapsModule,
     RouterModule.forRoot(routes),
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgxUiLoaderModule
   ],
   providers: [
+    DatePipe,
     { provide: ErrorHandler, useClass: ErrorService },
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true }
   ],

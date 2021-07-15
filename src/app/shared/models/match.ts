@@ -2,15 +2,15 @@ import {Equipe} from './equipe';
 
 export class Match {
   // tslint:disable-next-line:variable-name
-  _id: string;
-  date: string;
+  _id?: string;
+  date?: string;
   equipe1: Equipe;
   equipe2: Equipe;
-  etat: string;
-  lat: number;
-  lng: number;
+  etat?: string;
+  lat?: number;
+  lng?: number;
 
-  constructor(id: string, date: string, equipe1: Equipe, equipe2: Equipe, etat: string, lat: number, lng: number) {
+  constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: string, lat?: number, lng?: number) {
     this._id = id;
     this.date = date;
     this.equipe1 = equipe1;
