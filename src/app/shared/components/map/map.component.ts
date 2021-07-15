@@ -19,6 +19,7 @@ export class MapComponent implements OnInit {
     disableDoubleClickZoom: true,
     maxZoom: 300,
     minZoom: 8,
+    gestureHandling: 'none'
   };
 
   constructor() { }

@@ -120,8 +120,31 @@ body {
 .btn-blue{
   color:#fff;
   background-color:#0275d8;
+}
+
+.btn-success{
+  color:#fff;
+  background-color: #018603;
+}
+
+.btn-danger{
+  color:#fff;
+  background-color: red;
+}
+
+.btn {
   border: none;
   padding: 5px 10px;
+}
+.btn:hover {
+  cursor: pointer;
+}
+.btn:disabled {
+  color: #353535;
+  background-color: transparent;
+}
+.btn:hover:disabled {
+  cursor: not-allowed;
 }
 
 .action {
@@ -137,6 +160,7 @@ body {
 }
 
 th {
+  border-bottom: lightgray solid thin !important;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -146,3 +170,5 @@ td {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+.container-fluid .page-title{margin-top: 0}
