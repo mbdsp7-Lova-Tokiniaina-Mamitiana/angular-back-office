@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 })
 export class EquipeService {
 
-  private readonly api = environment.endpoint;
+  private readonly api = environment.node_endpoint;
   constructor(
     private http: HttpClient,
     private errorService: ErrorService

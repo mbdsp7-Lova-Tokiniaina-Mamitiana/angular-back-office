@@ -3,20 +3,23 @@ import {Equipe} from './equipe';
 export class Match {
   // tslint:disable-next-line:variable-name
   _id?: string;
-  date?: string;
+  // tslint:disable-next-line:variable-name
+  date_match?: string;
   equipe1: Equipe;
   equipe2: Equipe;
-  etat?: string;
-  lat?: number;
-  lng?: number;
+  etat?: boolean;
+  latitude?: number;
+  longitude?: number;
+  pari?: [];
 
-  constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: string, lat?: number, lng?: number) {
+  constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: boolean, lat?: number, lng?: number, pari?: []) {
     this._id = id;
-    this.date = date;
+    this.date_match = date;
     this.equipe1 = equipe1;
     this.equipe2 = equipe2;
     this.etat = etat;
-    this.lat = lat;
-    this.lng = lng;
+    this.latitude = lat;
+    this.longitude = lng;
+    this.pari = pari || [];
   }
 }

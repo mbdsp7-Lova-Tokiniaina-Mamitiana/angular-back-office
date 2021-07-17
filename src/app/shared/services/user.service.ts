@@ -12,7 +12,7 @@ import jwt_decode from 'jwt-decode';
 })
 export class UserService {
 
-    private readonly endpoint: string = environment.endpoint + '/api/users';
+    private readonly endpoint: string = environment.node_endpoint + '/users';
     private headersContent: any = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8'});
 
     public isLogged = new BehaviorSubject<User>(new User('', '', ''));

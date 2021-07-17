@@ -11,7 +11,7 @@ import {ErrorTracker} from '../models/error-tracker';
 })
 export class MatchService {
 
-  private readonly api = environment.endpoint;
+  private readonly api = environment.node_endpoint;
   constructor(
     private http: HttpClient,
     private errorService: ErrorService
