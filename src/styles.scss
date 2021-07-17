@@ -140,8 +140,9 @@ body {
   cursor: pointer;
 }
 .btn:disabled {
-  color: #353535;
+  color: #646060;
   background-color: transparent;
+  border: thin solid;
 }
 .btn:hover:disabled {
   cursor: not-allowed;
@@ -172,3 +173,13 @@ td {
 }
 
 .container-fluid .page-title{margin-top: 0}
+
+.form-control {
+  height: 40px;
+}
+label {
+  margin-top: 10px !important;
+}
+i {
+  margin-right: 5px;
+}

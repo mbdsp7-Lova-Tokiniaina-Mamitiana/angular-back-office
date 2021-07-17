@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
             _id: doc.equipe2._id,
             avatar: doc.equipe2.avatar,
             nom: doc.equipe2.nom,
-          }, doc._id, doc.date_match, doc.etat ? 'Terminé' : 'A venir', doc.latitude, doc.longitude)
+          }, doc._id, doc.date_match, doc.etat, doc.latitude, doc.longitude)
         );
       }
       // debugger;
@@ -42,7 +42,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  navigateToMatch(): void {
+  navigateToMatch(id?: string): void {
+    if (id) {
+      this.router.navigate(['/home/match/', id]).then(() => null);
+      return;
+    }
     this.router.navigate(['/home/match']).then(() => null);
   }
 }

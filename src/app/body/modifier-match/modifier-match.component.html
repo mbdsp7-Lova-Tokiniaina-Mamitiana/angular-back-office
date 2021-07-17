@@ -1,34 +1,40 @@
-<ngx-ui-loader></ngx-ui-loader>
+<ngx-ui-loader [loaderId]="'loader-01'"></ngx-ui-loader>
+<ngx-ui-loader [loaderId]="'loader-02'"></ngx-ui-loader>
+
 <p *ngIf="isNew; else autreTitre" class="page-title fs-3">Nouveau Match</p>
 <ng-template #autreTitre><p class="page-title fs-3">Modifier match</p></ng-template>
 
 <div class="row">
   <div class="col-12" style="display: flex; justify-content: center">
-    <button class="btn btn-blue" style="margin-right: 10px;"> <i class="mdi mdi-content-save mr-2"></i>Enregistrer</button>
-    <button class="btn btn-danger" [disabled]="isNew"> <i class="mdi mdi-stop-circle-outline mr-2"></i>Terminer le match</button>
+    <button class="btn btn-blue" style="margin-right: 10px;" (click)="saveOrUpdate()"> <i class="mdi mdi-content-save"></i>Enregistrer</button>
+    <button class="btn btn-danger"[disabled]="isNew || match.etat"> <i class="mdi mdi-stop-circle-outline"></i>Terminer le match</button>
   </div>
 </div>
 
 <form>
-  <div class="row mt-5">
+  <div class="row mt-3">
     <label for="equipe1" class="col-3">Équipe 1</label>
-    <input type="text" placeholder="Équipe 1" id="equipe1" name="equipe1" class="form-control col-7">
+    <select name="equipe1" id="equipe1" class="form-control col-7" [(ngModel)]="match.equipe1" [compareWith]="compareByEquipeId">
+      <option *ngFor="let equipe of equipes" [ngValue]="equipe">{{equipe.nom}}</option>
+    </select>
   </div>
   <div class="row mt-3">
     <label for="equipe2" class="col-3">Équipe 2</label>
-    <input type="text" placeholder="Équipe 2" id="equipe2" name="equipe2" class="form-control col-7">
+    <select name="equipe2" id="equipe2" class="form-control col-7" [(ngModel)]="match.equipe2" [compareWith]="compareByEquipeId">
+      <option [ngValue]="equipe" *ngFor="let equipe of equipes">{{equipe.nom}}</option>
+    </select>
   </div>
   <div class="row mt-3">
     <label for="date" class="col-3">Date</label>
-    <input type="date" id="date" name="date" class="form-control col-7" [(ngModel)]="match.date">
+    <input type="date" id="date" name="date" class="form-control col-7" [(ngModel)]="match.date_match">
   </div>
   <div class="row mt-3">
     <label for="lat" class="col-3">Latitude</label>
-    <input type="number" id="lat" name="lat" class="form-control col-7" [(ngModel)]="match.lat" (change)="coordinateChanged()">
+    <input type="number" id="lat" name="lat" class="form-control col-7" [(ngModel)]="match.latitude" (change)="coordinateChanged()">
   </div>
   <div class="row mt-3">
     <label for="lng" class="col-3">Longitude</label>
-    <input type="number" id="lng" name="lng" class="form-control col-7" [(ngModel)]="match.lng" (change)="coordinateChanged()">
+    <input type="number" id="lng" name="lng" class="form-control col-7" [(ngModel)]="match.longitude" (change)="coordinateChanged()">
   </div>
 </form>
 <div class="mt-3">

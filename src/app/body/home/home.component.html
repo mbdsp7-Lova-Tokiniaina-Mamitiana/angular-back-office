@@ -3,7 +3,7 @@
   <div class="page-title fs-3 mb-2">Liste des matchs </div>
   <div class="row mt-3">
     <div class="col-12">
-      <button class="btn-blue" (click)="navigateToMatch()"><i class="mdi mdi-plus pt-5"></i>Nouveau</button>
+      <button class="btn btn-blue" (click)="navigateToMatch()"><i class="mdi mdi-plus pt-5"></i>Nouveau</button>
     </div>
   </div>
   <div class="row mt-3">
@@ -18,11 +18,12 @@
         <tr *ngFor="let match of matches">
           <td>{{match.equipe1.nom}}</td>
           <td>{{match.equipe2.nom}}</td>
-          <td>{{match.date}}</td>
-          <td>{{match.etat}}</td>
+          <td>{{match.date_match}}</td>
+          <td>{{match.etat ? 'Terminé' : 'A venir'}}</td>
           <td>
-            <i class="mdi mdi-pencil pt-5 action"></i>
+            <i class="mdi mdi-pencil pt-5 action" (click)="navigateToMatch(match._id)"></i>
             <i class="mdi mdi-eye pt-5 action"></i>
+            <i class="mdi mdi-delete pt-5 action text-danger"></i>
           </td>
         </tr>
       </table>
