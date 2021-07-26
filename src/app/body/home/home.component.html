@@ -22,8 +22,7 @@
           <td>{{match.etat ? 'Terminé' : 'A venir'}}</td>
           <td>
             <i class="mdi mdi-pencil pt-5 action" (click)="navigateToMatch(match._id)"></i>
-            <i class="mdi mdi-eye pt-5 action"></i>
-            <i class="mdi mdi-delete pt-5 action text-danger"></i>
+            <i class="mdi mdi-delete pt-5 action text-danger" (click)="deleteMatch(match._id)"></i>
           </td>
         </tr>
       </table>

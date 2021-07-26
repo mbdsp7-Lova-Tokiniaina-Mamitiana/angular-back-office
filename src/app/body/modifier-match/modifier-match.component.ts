@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Match} from '../../shared/models/match';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Equipe} from '../../shared/models/equipe';
 import {DatePipe} from '@angular/common';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -13,8 +13,10 @@ import {MatchService} from '../../shared/services/match.service';
   styleUrls: ['./modifier-match.component.scss']
 })
 export class ModifierMatchComponent implements OnInit {
-// this.route.snapshot.params.id
   match: Match;
+  /**
+   * If this.route.snapshot.params.id is defined, this.match is not a new Match
+   */
   isNew = false;
   mapCenter = {
     lat: 0,
@@ -22,16 +24,18 @@ export class ModifierMatchComponent implements OnInit {
   };
   equipes: Equipe[] = [];
   apiResult: any;
+  matchInputTime: any;
+  errorMessage = '';
 
   constructor(private route: ActivatedRoute,
               public datepipe: DatePipe,
               private equipeService: EquipeService,
               private matchService: MatchService,
-              private ngxService: NgxUiLoaderService) {
+              private ngxService: NgxUiLoaderService,
+              private router: Router) {
     this.isNew = [null, undefined].includes(this.route.snapshot.params.id);
     const date: string = this.datepipe.transform(new Date(), 'yyyy-MM-dd') || '';
     this.match = new Match(new Equipe(), new Equipe(), '', date, false, 53.4834, -2.1995);
-    // this.match = {lat: 53.4834, lng: -2.1995};
     this.coordinateChanged();
   }
 
@@ -47,7 +51,9 @@ export class ModifierMatchComponent implements OnInit {
         this.ngxService.startLoader('loader-02');
         this.matchService.getById(this.route.snapshot.params.id).subscribe(match => {
           this.match = match;
-          this.match.date_match = this.datepipe.transform(new Date(match.date_match), 'yyyy-MM-dd') || '';
+          const dateTime = (this.datepipe.transform(new Date(match.date_match), 'yyyy-MM-dd HH:mm') || '').split(' ');
+          this.match.date_match = dateTime[0];
+          this.matchInputTime = dateTime[1] || '';
           this.coordinateChanged();
           this.ngxService.stopLoader('loader-02');
         }, error => { this.ngxService.stop(); });
@@ -63,10 +69,36 @@ export class ModifierMatchComponent implements OnInit {
   }
 
   saveOrUpdate(): void {
-    debugger;
+    if (!Object.keys(this.match.equipe1).length
+      || !Object.keys(this.match.equipe2).length
+      || this.match.date_match === undefined
+      || !this.match.date_match.length
+      || this.matchInputTime === undefined
+      || !this.matchInputTime.length) {
+      this.errorMessage = 'Veuillez completer tous les champs';
+    }
+    // Transform long date to string  with the format yyyy-MM-dd
+    this.match.date_match = `${this.datepipe.transform(new Date(this.match.date_match || ''), 'yyyy-MM-dd')} ${this.matchInputTime}`;
+    // If we need to insert a new match
+    if (this.isNew) {
+      this.matchService.save(this.match).subscribe(match => this.router.navigate(['/home']));
+      return;
+    }
+    // If not, update
   }
 
   compareByEquipeId(e1: Equipe, e2: Equipe): boolean{
     return e1._id === e2._id;
+  }
+
+  terminerMatch(): void{
+    this.ngxService.startLoader('loader-01');
+    this.matchService.finishMatch(this.match).subscribe(() => {
+      this.ngxService.stopLoader('loader-01');
+      this.router.navigate(['/home']);
+    }, error => {
+      this.ngxService.stopLoader('loader-01');
+      this.router.navigate(['/home']);
+    });
   }
 }

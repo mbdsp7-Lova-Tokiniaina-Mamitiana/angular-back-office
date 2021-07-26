@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Equipe} from '../../shared/models/equipe';
+import {Component, OnInit} from '@angular/core';
 import {Match} from '../../shared/models/match';
 import {Router} from '@angular/router';
 import {MatchService} from '../../shared/services/match.service';
-import {ThemePalette} from '@angular/material/core';
-import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {ApiResult} from '../../shared/models/api-result';
 
 @Component({
   selector: 'app-home',
@@ -18,12 +14,38 @@ export class HomeComponent implements OnInit {
   matches: Match[] = [];
   apiResult: any;
 
-  constructor(private router: Router, private matchService: MatchService, private ngxService: NgxUiLoaderService) {
+  constructor(private router: Router,
+              private matchService: MatchService,
+              private ngxService: NgxUiLoaderService) {
   }
 
   ngOnInit(): void {
     this.ngxService.start();
-    this.matchService.getAll().subscribe(result => {
+    this.updateMatchList();
+  }
+
+  navigateToMatch(id?: string): void {
+    if (id) {
+      this.router.navigate(['/home/match/', id]).then(() => null);
+      return;
+    }
+    this.router.navigate(['/home/match']).then(() => null);
+  }
+
+  deleteMatch(id: string | undefined): void {
+    if (!id) { return; }
+    this.ngxService.start();
+    this.matchService.deleteMatch(id).subscribe(() => {
+      this.updateMatchList();
+    },
+        error => {
+          this.ngxService.stop();
+          console.error(error);
+        });
+  }
+
+  updateMatchList(): void {
+    this.matchService.getAll(1, 100).subscribe(result => {
       this.apiResult = result || [];
       if (this.apiResult.docs) {
         this.matches = this.apiResult.docs.map((doc: any) => new Match({
@@ -40,13 +62,5 @@ export class HomeComponent implements OnInit {
       // debugger;
       this.ngxService.stop();
     });
-  }
-
-  navigateToMatch(id?: string): void {
-    if (id) {
-      this.router.navigate(['/home/match/', id]).then(() => null);
-      return;
-    }
-    this.router.navigate(['/home/match']).then(() => null);
   }
 }

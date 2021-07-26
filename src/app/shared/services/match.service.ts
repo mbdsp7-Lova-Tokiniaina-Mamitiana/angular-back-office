@@ -5,6 +5,7 @@ import {ErrorService} from './error.service';
 import {catchError} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {ErrorTracker} from '../models/error-tracker';
+import {Match} from '../models/match';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,17 @@ export class MatchService {
     return this.http.get<any>(`${this.api}/match/${idMatch}`);
   }
 
+  save(match: Match): Observable<any> {
+    delete match._id;
+    return this.http.post(`${this.api}/match/`, match);
+  }
 
+  deleteMatch(idMatch: string): Observable<any> {
+    return this.http.delete(`${this.api}/match/${idMatch}`);
+  }
+
+  finishMatch(match: Match): Observable<any> {
+    return this.http.post(`${this.api}/terminerMatch`, {match});
+  }
 
 }
