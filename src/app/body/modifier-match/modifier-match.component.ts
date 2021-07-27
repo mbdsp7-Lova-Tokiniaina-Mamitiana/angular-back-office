@@ -6,6 +6,8 @@ import {DatePipe} from '@angular/common';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {EquipeService} from '../../shared/services/equipe.service';
 import {MatchService} from '../../shared/services/match.service';
+import {Debugger} from 'inspector';
+import {Pari} from '../../shared/models/pari';
 
 @Component({
   selector: 'app-modifier-match',
@@ -14,10 +16,6 @@ import {MatchService} from '../../shared/services/match.service';
 })
 export class ModifierMatchComponent implements OnInit {
   match: Match;
-  /**
-   * If this.route.snapshot.params.id is defined, this.match is not a new Match
-   */
-  isNew = false;
   mapCenter = {
     lat: 0,
     lng: 0
@@ -25,7 +23,15 @@ export class ModifierMatchComponent implements OnInit {
   equipes: Equipe[] = [];
   apiResult: any;
   matchInputTime: any;
+  pariToAdd = new Pari();
+
+  /**
+   * If this.route.snapshot.params.id is defined, this.match is not a new Match
+   */
+  isNew = false;
   errorMessage = '';
+  isFormValid = false;
+  isAddingPari = false;
 
   constructor(private route: ActivatedRoute,
               public datepipe: DatePipe,
@@ -51,13 +57,16 @@ export class ModifierMatchComponent implements OnInit {
         this.ngxService.startLoader('loader-02');
         this.matchService.getById(this.route.snapshot.params.id).subscribe(match => {
           this.match = match;
+          this.match.paris = match.pari.map((pari: any) => new Pari(pari._id, pari.description, pari.cote));
           const dateTime = (this.datepipe.transform(new Date(match.date_match), 'yyyy-MM-dd HH:mm') || '').split(' ');
           this.match.date_match = dateTime[0];
           this.matchInputTime = dateTime[1] || '';
           this.coordinateChanged();
           this.ngxService.stopLoader('loader-02');
+          this.updateFormValidStatus();
         }, error => { this.ngxService.stop(); });
       }
+      this.updateFormValidStatus();
     }, error => { this.ngxService.stop(); });
   }
 
@@ -69,12 +78,7 @@ export class ModifierMatchComponent implements OnInit {
   }
 
   saveOrUpdate(): void {
-    if (!Object.keys(this.match.equipe1).length
-      || !Object.keys(this.match.equipe2).length
-      || this.match.date_match === undefined
-      || !this.match.date_match.length
-      || this.matchInputTime === undefined
-      || !this.matchInputTime.length) {
+    if (!this.isMatchFormInvalid()) {
       this.errorMessage = 'Veuillez completer tous les champs';
     }
     // Transform long date to string  with the format yyyy-MM-dd
@@ -100,5 +104,35 @@ export class ModifierMatchComponent implements OnInit {
       this.ngxService.stopLoader('loader-01');
       this.router.navigate(['/home']);
     });
+  }
+
+  isMatchFormInvalid(): boolean {
+    return !Object.keys(this.match.equipe1).length
+      || !Object.keys(this.match.equipe2).length
+      || this.match.date_match === undefined
+      || !this.match.date_match.length
+      || this.matchInputTime === undefined
+      || !this.matchInputTime.length;
+  }
+
+  updateFormValidStatus(): void {
+    this.isFormValid = !this.isMatchFormInvalid();
+  }
+
+  changeAddingPariStatus(status?: boolean): void {
+    this.isAddingPari = status ? status : !this.isAddingPari;
+    this.pariToAdd = new Pari();
+  }
+
+  addPariToMatch(): void {
+    // debugger;
+    if (!this.pariToAdd.isValid()) { return; }
+    this.match.paris.push(this.pariToAdd);
+    this.changeAddingPariStatus(false);
+    // debugger;
+  }
+
+  removePariFromMatch(pariToRemove: Pari): void {
+    this.match.paris = this.match.paris.filter(pari => pari !== pariToRemove);
   }
 }

@@ -22,7 +22,7 @@
           <td>{{match.etat ? 'Terminé' : 'A venir'}}</td>
           <td>
             <i class="mdi mdi-pencil pt-5 action" (click)="navigateToMatch(match._id)"></i>
-            <i class="mdi mdi-delete pt-5 action text-danger" (click)="deleteMatch(match._id)"></i>
+            <i class="mdi mdi-delete pt-5 action text-danger" (click)="deleteMatch(match._id)" *ngIf="!match.etat"></i>
           </td>
         </tr>
       </table>

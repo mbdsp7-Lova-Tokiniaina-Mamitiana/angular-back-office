@@ -1,4 +1,5 @@
 import {Equipe} from './equipe';
+import {Pari} from './pari';
 
 export class Match {
   // tslint:disable-next-line:variable-name
@@ -10,9 +11,9 @@ export class Match {
   etat?: boolean;
   latitude?: number;
   longitude?: number;
-  pari?: [];
+  paris: Pari[];
 
-  constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: boolean, lat?: number, lng?: number, pari?: []) {
+  constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: boolean, lat?: number, lng?: number, paris = []) {
     this._id = id;
     this.date_match = date;
     this.equipe1 = equipe1;
@@ -20,6 +21,6 @@ export class Match {
     this.etat = etat;
     this.latitude = lat;
     this.longitude = lng;
-    this.pari = pari || [];
+    this.paris = paris;
   }
 }
