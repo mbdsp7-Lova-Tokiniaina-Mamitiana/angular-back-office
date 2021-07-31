@@ -23,11 +23,11 @@ export class MatchService {
   getAll(page?: number, limit?: number): Observable<any> {
     let url: string;
     if (page && limit) {
-      url = `${this.api}/matchs?page=${page}&limit=${limit}`;
+      url = `${this.api}/matchs/search?page=${page}&limit=${limit}`;
     } else {
-      url = `${this.api}/matchs`;
+      url = `${this.api}/matchs/search`;
     }
-    return this.http.get<any>(url);
+    return this.http.post<any>(url, null);
   }
 
   getById(idMatch: string): Observable<any> {
@@ -39,12 +39,16 @@ export class MatchService {
     return this.http.post(`${this.api}/match/`, match);
   }
 
+  updateMatch(match: Match): Observable<any> {
+    return this.http.put(`${this.api}/match/`, match);
+  }
+
   deleteMatch(idMatch: string): Observable<any> {
     return this.http.delete(`${this.api}/match/${idMatch}`);
   }
 
   finishMatch(match: Match): Observable<any> {
-    return this.http.post(`${this.api}/terminerMatch`, {match});
+    return this.http.post(`${this.api}/terminerMatch`, {id: match._id});
   }
 
 }

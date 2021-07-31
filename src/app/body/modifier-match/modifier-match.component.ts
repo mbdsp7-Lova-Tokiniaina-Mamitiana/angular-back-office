@@ -89,6 +89,7 @@ export class ModifierMatchComponent implements OnInit {
       return;
     }
     // If not, update
+    this.matchService.updateMatch(this.match).subscribe(match => this.router.navigate(['/home']));
   }
 
   compareByEquipeId(e1: Equipe, e2: Equipe): boolean{

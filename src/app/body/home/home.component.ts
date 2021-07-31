@@ -61,6 +61,9 @@ export class HomeComponent implements OnInit {
       }
       // debugger;
       this.ngxService.stop();
+    }, (error) => {
+      console.error(error);
+      this.ngxService.stop();
     });
   }
 }

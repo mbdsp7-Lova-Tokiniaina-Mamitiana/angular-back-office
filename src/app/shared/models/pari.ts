@@ -1,6 +1,6 @@
 export class Pari {
   // tslint:disable-next-line:variable-name
-  _id: string;
+  _id?: string;
   description: string;
   cote: number;
 
