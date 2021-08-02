@@ -12,6 +12,7 @@ export class Match {
   latitude?: number;
   longitude?: number;
   paris: Pari[];
+  date?: Date;
 
   constructor(equipe1: Equipe, equipe2: Equipe, id?: string, date?: string, etat?: boolean, lat?: number, lng?: number, paris = []) {
     this._id = id;
@@ -22,5 +23,6 @@ export class Match {
     this.latitude = lat;
     this.longitude = lng;
     this.paris = paris;
+    this.date = new Date(date || '');
   }
 }
