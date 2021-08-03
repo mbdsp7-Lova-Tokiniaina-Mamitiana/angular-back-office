@@ -6,8 +6,9 @@
 
 <div class="row">
   <div class="col-12" style="display: flex; justify-content: center">
-    <button class="btn btn-blue" [disabled]="match.etat || !isFormValid" style="margin-right: 10px;" (click)="saveOrUpdate()"> <i class="mdi mdi-content-save"></i>Enregistrer</button>
-    <button (click)="terminerMatch()" [disabled]="isNew || match.etat" class="btn btn-danger"> <i class="mdi mdi-stop-circle-outline"></i>Terminer le match</button>
+    <button class="btn btn-blue" [disabled]="match.etat || !isFormValid || isFinishingMatch" style="margin-right: 10px;" (click)="saveOrUpdate()"> <i class="mdi mdi-content-save"></i>Enregistrer</button>
+    <button (click)="changeIsFinishingMatchStatus()" *ngIf="!isFinishingMatch" [disabled]="isNew || match.etat" class="btn btn-danger"> <i class="mdi mdi-stop-circle-outline"></i>Terminer le match</button>
+    <button (click)="terminerMatch()" *ngIf="isFinishingMatch" class="btn btn-outline-success"> <i class="mdi mdi-check"></i>Valider</button>
   </div>
 </div>
 <div class="row">
@@ -51,7 +52,10 @@
   <div class="col-6" style="border-left: black solid thin; margin-top: 15px;">
     <div style="display: flex; justify-content: space-between">
       <div><h5>Liste des paris</h5></div>
-      <div><button class="btn btn-primary" style="height: 30px; padding: 0 12px 0 12px" (click)="changeAddingPariStatus()" [disabled]="match.etat">Ajouter</button></div>
+      <div>
+        <button class="btn btn-outline-dark mr-1" style="height: 30px; padding: 0 12px 0 12px" (click)="changeIsFinishingMatchStatus(false)" *ngIf="isFinishingMatch">Annuler</button>
+        <button class="btn btn-blue" style="height: 30px; padding: 0 12px 0 12px" (click)="changeAddingPariStatus()" *ngIf="!match.etat && !isFinishingMatch">Ajouter</button>
+      </div>
     </div>
     <div style="max-height: 275px; overflow-y: auto; margin-top: 5px;">
       <div class="card mb-1" *ngIf="isAddingPari">
@@ -75,7 +79,8 @@
         <div class="card-body">
           <div style="display: flex; justify-content: space-between">
             <div><h5 class="card-title">Cote: {{pari.cote}}</h5></div>
-            <div><i class="text-danger mdi mdi-delete btn" (click)="removePariFromMatch(pari)"></i></div>
+            <div *ngIf="!isFinishingMatch && !match.etat"><i class="text-danger mdi mdi-delete btn" (click)="removePariFromMatch(pari)"></i></div>
+            <div *ngIf="isFinishingMatch"><input type="checkbox" class="mr-1" [checked]="pari.gagnant" [(ngModel)]="pari.gagnant">Gagnant</div>
           </div>
           <p class="card-text">{{pari.description}}</p>
         </div>

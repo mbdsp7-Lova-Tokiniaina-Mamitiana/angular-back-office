@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Match} from '../../shared/models/match';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Equipe} from '../../shared/models/equipe';
@@ -6,7 +6,6 @@ import {DatePipe} from '@angular/common';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {EquipeService} from '../../shared/services/equipe.service';
 import {MatchService} from '../../shared/services/match.service';
-import {Debugger} from 'inspector';
 import {Pari} from '../../shared/models/pari';
 
 @Component({
@@ -32,6 +31,7 @@ export class ModifierMatchComponent implements OnInit {
   errorMessage = '';
   isFormValid = false;
   isAddingPari = false;
+  isFinishingMatch = false;
 
   constructor(private route: ActivatedRoute,
               public datepipe: DatePipe,
@@ -98,12 +98,15 @@ export class ModifierMatchComponent implements OnInit {
 
   terminerMatch(): void{
     this.ngxService.startLoader('loader-01');
-    this.matchService.finishMatch(this.match).subscribe(() => {
-      this.ngxService.stopLoader('loader-01');
-      this.router.navigate(['/home']);
-    }, error => {
-      this.ngxService.stopLoader('loader-01');
-      this.router.navigate(['/home']);
+    this.matchService.finishMatch(this.match,
+      () => {
+        this.ngxService.stopLoader('loader-01');
+        this.router.navigate(['/home']);
+      },
+      (err) => {
+        console.error(err);
+        this.ngxService.stopLoader('loader-01');
+        this.router.navigate(['/home']);
     });
   }
 
@@ -123,6 +126,10 @@ export class ModifierMatchComponent implements OnInit {
   changeAddingPariStatus(status?: boolean): void {
     this.isAddingPari = status ? status : !this.isAddingPari;
     this.pariToAdd = new Pari();
+  }
+
+  changeIsFinishingMatchStatus(status?: boolean): void {
+    this.isFinishingMatch = status ? status : !this.isFinishingMatch;
   }
 
   addPariToMatch(): void {

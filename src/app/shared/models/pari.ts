@@ -3,6 +3,7 @@ export class Pari {
   _id?: string;
   description: string;
   cote: number;
+  gagnant = false;
 
 
   constructor(id = '', description = '', cote = 1) {

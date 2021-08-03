@@ -18,10 +18,11 @@
         <tr *ngFor="let match of matches">
           <td>{{match.equipe1.nom}}</td>
           <td>{{match.equipe2.nom}}</td>
-          <td>{{match.date_match}}</td>
+          <td>{{match.date | date:'d MMM y, h:mm a'}}</td>
           <td>{{match.etat ? 'Terminé' : 'A venir'}}</td>
           <td>
-            <i class="mdi mdi-pencil pt-5 action" (click)="navigateToMatch(match._id)"></i>
+            <i class="mdi mdi-pencil pt-5 action" (click)="navigateToMatch(match._id)" *ngIf="!match.etat"></i>
+            <i class="mdi mdi-eye pt-5 action" (click)="navigateToMatch(match._id)" *ngIf="match.etat"></i>
             <i class="mdi mdi-delete pt-5 action text-danger" (click)="deleteMatch(match._id)" *ngIf="!match.etat"></i>
           </td>
         </tr>

@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {ErrorService} from './error.service';
-import {catchError} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {ErrorTracker} from '../models/error-tracker';
 import {Match} from '../models/match';
 
 @Injectable({
@@ -12,7 +10,8 @@ import {Match} from '../models/match';
 })
 export class MatchService {
 
-  private readonly api = environment.node_endpoint;
+  private readonly nodeApiUri = environment.node_endpoint;
+  private readonly grailsApiUri = environment.grails_endpoint + 'api';
   constructor(
     private http: HttpClient,
     private errorService: ErrorService
@@ -23,32 +22,41 @@ export class MatchService {
   getAll(page?: number, limit?: number): Observable<any> {
     let url: string;
     if (page && limit) {
-      url = `${this.api}/matchs/search?page=${page}&limit=${limit}`;
+      url = `${this.nodeApiUri}/matchs/search?page=${page}&limit=${limit}`;
     } else {
-      url = `${this.api}/matchs/search`;
+      url = `${this.nodeApiUri}/matchs/search`;
     }
     return this.http.post<any>(url, null);
   }
 
   getById(idMatch: string): Observable<any> {
-    return this.http.get<any>(`${this.api}/match/${idMatch}`);
+    return this.http.get<any>(`${this.nodeApiUri}/match/${idMatch}`);
   }
 
   save(match: Match): Observable<any> {
     delete match._id;
-    return this.http.post(`${this.api}/match/`, match);
+    return this.http.post(`${this.nodeApiUri}/match/`, match);
   }
 
   updateMatch(match: Match): Observable<any> {
-    return this.http.put(`${this.api}/match/`, match);
+    return this.http.put(`${this.nodeApiUri}/match/`, match);
   }
 
   deleteMatch(idMatch: string): Observable<any> {
-    return this.http.delete(`${this.api}/match/${idMatch}`);
+    return this.http.delete(`${this.nodeApiUri}/match/${idMatch}`);
   }
 
-  finishMatch(match: Match): Observable<any> {
-    return this.http.post(`${this.api}/terminerMatch`, {id: match._id});
+  finishMatch(match: Match, callback: () => void, onerror: (error: string) => void): void {
+    const promises: Promise<any>[] = match.paris
+      .filter(pari => pari.gagnant)
+      .map(pari => this.http.post(
+      `${this.grailsApiUri}/distribution`,
+      {id: pari._id})
+      .toPromise());
+    promises.push(this.http.post(`${this.nodeApiUri}/terminerMatch`, {id: match._id}).toPromise());
+    Promise.all(promises).then(data => {
+      this.http.post(`${this.grailsApiUri}/terminermatch`, {id: match._id}).subscribe(() => callback());
+    }).catch(err => onerror(err));
   }
 
 }

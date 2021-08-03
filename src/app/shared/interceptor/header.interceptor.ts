@@ -11,7 +11,7 @@ export class HeaderInterceptor implements HttpInterceptor {
             jsonReq = req.clone({
                 headers: req.headers.set('Authorization', 'Bearer ' + token)
             });
-            console.log('Header Interceptor', jsonReq);
+            /*console.log('Header Interceptor', jsonReq);*/
         }
         return next.handle(jsonReq);
     }
