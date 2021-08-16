@@ -1,29 +1,26 @@
 export class ApiResult {
-  docs: [];
+  docs;
   hasNextPage: boolean;
   hasPrevPage: boolean;
   limit: number;
   nextPage: number;
   page: number;
   pagingCounter: number;
-  prevPage: number | null;
+  prevPage: number;
   totalDocs: number;
   totalPages: number;
 
 
-  constructor({
-                docs,
-                hasNextPage,
-                hasPrevPage,
-                limit,
-                nextPage,
-                page,
-                pagingCounter,
-                prevPage,
-                totalDocs,
-                totalPages
-                // tslint:disable-next-line:max-line-length
-              }: { docs: [], hasNextPage: boolean, hasPrevPage: boolean, limit: number, nextPage: number, page: number, pagingCounter: number, prevPage: number | null, totalDocs: number, totalPages: number }) {
+  constructor( docs = [],
+               hasNextPage = false,
+               hasPrevPage = false,
+               limit = 0,
+               nextPage = 1,
+               page = 1,
+               pagingCounter = 1,
+               prevPage = 1,
+               totalDocs = 0,
+               totalPages = 1 ) {
     this.docs = docs;
     this.hasNextPage = hasNextPage;
     this.hasPrevPage = hasPrevPage;

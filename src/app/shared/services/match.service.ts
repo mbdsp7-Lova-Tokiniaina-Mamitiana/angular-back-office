@@ -22,11 +22,11 @@ export class MatchService {
   getAll(page?: number, limit?: number): Observable<any> {
     let url: string;
     if (page && limit) {
-      url = `${this.nodeApiUri}/matchs/search?page=${page}&limit=${limit}`;
+      url = `${this.nodeApiUri}/matchs/search`;
     } else {
       url = `${this.nodeApiUri}/matchs/search`;
     }
-    return this.http.post<any>(url, null);
+    return this.http.post<any>(url, {page, limit});
   }
 
   getById(idMatch: string): Observable<any> {

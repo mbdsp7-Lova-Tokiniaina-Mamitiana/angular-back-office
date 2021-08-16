@@ -3,6 +3,7 @@ import {Match} from '../../shared/models/match';
 import {Router} from '@angular/router';
 import {MatchService} from '../../shared/services/match.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {ApiResult} from '../../shared/models/api-result';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,9 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 export class HomeComponent implements OnInit {
 
   matches: Match[] = [];
-  apiResult: any;
+  apiResult = new ApiResult();
+  page = 1;
+  limit = 10;
 
   constructor(private router: Router,
               private matchService: MatchService,
@@ -44,8 +47,8 @@ export class HomeComponent implements OnInit {
         });
   }
 
-  updateMatchList(): void {
-    this.matchService.getAll(1, 100).subscribe(result => {
+  updateMatchList( pageNumber = 1, limit = 10): void {
+    this.matchService.getAll(pageNumber, this.limit).subscribe(result => {
       this.apiResult = result || [];
       if (this.apiResult.docs) {
         this.matches = this.apiResult.docs.map((doc: any) => new Match({
@@ -59,7 +62,6 @@ export class HomeComponent implements OnInit {
           }, doc._id, doc.date_match, doc.etat, doc.latitude, doc.longitude)
         );
       }
-      // debugger;
       this.ngxService.stop();
     }, (error) => {
       console.error(error);
